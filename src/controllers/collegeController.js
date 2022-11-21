@@ -1,51 +1,60 @@
-const collegeModel = require("../models/collegeModel")
-const valid = require("../validator/validator")
-const validUrl=require("valid-url")
-//const { Module } = require("module")
+ const collegeModel = require('../models/collegeModel');
+const internModel = require('../models/internModel');
+const {isValidName,isValidAbvr, isValidBody,isValidUrl} = require('../validator/validator')
 
-
-const createCollege = async function(req,res){
-
-    try{
-
-        const requestBody= req.body
-       
-        const { name,fullName,logoLink}=requestBody
-        if(!valid.isValidRequestBody(requestBody)){
-            return res.status(400).send({status:false,messege:"plz provide request body"})
-        }
-
+const createCollege = async function (req, res) {
+    try {
+        const requestBody = req.body
+        const { name, fullName, logoLink } = requestBody
         
-        if(!valid.isValid(name)){
-            return res.status(400).send({status:false,messege:"plz provide name"})
-
-        }
+        if (!isValidBody(requestBody)) return res.status(400).send({ status: false, messege: "plz provide request body" })
+        if (!isValidAbvr(name))  return res.status(400).send({ status: false, messege: "plz provide valid name" })
+        //if (!isValidName(fullName))  return res.status(400).send({ status: false, messege: "plz provide valid fullName" })
+        if (!isValidUrl(logoLink))  return res.status(400).send({ status: false, messege: "Invalid logoLink" })
         
-        if(!valid.isValid(fullName)){
-            return res.status(400).send({status:false,messege:"plz provide fullName"})
+        // Create college
+        const newCollege = await collegeModel.create(requestBody)
 
+        const obj = {
+            name : newCollege.name,
+            fullName : newCollege.fullName,
+            logoLink : newCollege.logoLink,
+            isDeleted : newCollege.isDeleted
         }
-        if(!validUrl.isUri(logoLink.trim())){
-            return res.status(400).send({status:false,messege:"Invalid logoLink"})
-        }
-const isNameAlreadyUsed=await collegeModel.findOne({name})
-if(isNameAlreadyUsed){
-    return res.status(400).send({status:false,messege:"Name is alerady use try another name"})
-}
- const newCollege = await collegeModel.create(requestBody)
- return res.status(201).send({status:true,messege:'college register succesefully', data:newCollege})
-
+        return res.status(201).send({ status: true, messege: 'college register succesefully', data: obj })
     }
-    catch(err){
-
-return res.status(500).send({status:false,messege:'err.msg'})
+    catch (err) {
+        return res.status(500).send({ status: false, messege: err.message })
     }
 }
 
 
+const getCollege = async (req, res) => {
+    try {
+ const name = req.query.collegeName;
+        if (!name) return res.status(400).send({ status: false, massege: 'collegeName is required for query.' });
+
+        const existCollege = await collegeModel.findOne({ name });
+        if (!existCollege) return res.status(400).send({ status: false, massege: `'${name} college dose't exists.` });
+
+        const interns = await internModel.find({ collegeId: existCollege._id, isDeleted: false }).select({ name: 1, email: 1, mobile: 1 });
+
+        const data = {
+            name: existCollege.name,
+            fullName: existCollege.fullName,
+            logoLink: existCollege.logoLink,
+            interns: interns
+        };
+
+        return res.status(200).send({ status: true, data: data });
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(500).send({ status: false, error: err.message });
+    }
+};
 
 
 
 
-
-module.exports={createCollege}
+module.exports = { createCollege, getCollege }
