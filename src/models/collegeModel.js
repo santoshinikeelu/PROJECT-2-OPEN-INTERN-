@@ -18,3 +18,11 @@ isDeleted:{
 },{timestamps:true})
 
 module.exports= mongoose.model("college",collegeSchema)
+
+
+
+
+
+
+
+
