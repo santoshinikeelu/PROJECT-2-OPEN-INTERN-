@@ -1,6 +1,7 @@
 const collegeModel = require("../models/collegeModel")
 const {isValid,isValidRequestBody}= require("../validator/validator")
 const validUrl=require("valid-url")
+//const { Module } = require("module")
 
 
 const createCollege = async function(){
@@ -37,3 +38,9 @@ if(isNameAlreadyUsed){
 return res.status(500).send({status:false,messege:'err.msg'})
     }
 }
+
+
+
+
+
+module.exports={createCollege}
