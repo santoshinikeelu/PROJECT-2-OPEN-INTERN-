@@ -30,3 +30,4 @@ isDelete:{
 },{timestamps:true})
 
 
+module.exports=mongoose.model("intern" ,internSchema )
