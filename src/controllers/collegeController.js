@@ -1,24 +1,27 @@
 const collegeModel = require("../models/collegeModel")
-const {isValid,isValidRequestBody}= require("../validator/validator")
+const valid = require("../validator/validator")
 const validUrl=require("valid-url")
 //const { Module } = require("module")
 
 
-const createCollege = async function(){
+const createCollege = async function(req,res){
 
     try{
 
         const requestBody= req.body
-        if(isValidRequestBody(requestBody)){
+       
+        const { name,fullName,logoLink}=requestBody
+        if(!valid.isValidRequestBody(requestBody)){
             return res.status(400).send({status:false,messege:"plz provide request body"})
         }
-        const { name,fullName,logoLink}=requestBody
-        if(!isValid(name)){
+
+        
+        if(!valid.isValid(name)){
             return res.status(400).send({status:false,messege:"plz provide name"})
 
         }
         
-        if(!isValid(fullName)){
+        if(!valid.isValid(fullName)){
             return res.status(400).send({status:false,messege:"plz provide fullName"})
 
         }
@@ -38,6 +41,8 @@ if(isNameAlreadyUsed){
 return res.status(500).send({status:false,messege:'err.msg'})
     }
 }
+
+
 
 
 
