@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const route = require('./routes/route')
 const app = express()
 app.use(express.json())
-mongoose.connect('mongodb+srv://saquib:Saquib123@mohammadsaquib.f3sxbno.mongodb.net/project', {
+mongoose.connect('mongodb+srv://santoshinikeelu:tummereho683@cluster0.zhokymy.mongodb.net/test', {
     useNewUrlParser: true
 })
     .then(() => console.log("mongodb is connected"))

@@ -2,7 +2,7 @@
 const internModel = require('../models/internModel');
 const axios = require('axios')
 
-const {isValidName,isValidAbvr, isValidBody} = require('../validator/validator')
+const {isValidFullName,isValidName, isValidBody} = require('../validator/validator')
 const createCollege = async function (req, res) {
     try {
         const requestBody = req.body
@@ -11,8 +11,8 @@ const createCollege = async function (req, res) {
         if (!fullName) return res.status(400).send({ status: false, message: 'Please fill fullName.' })
         if (!logoLink) return res.status(400).send({ status: false, message: 'Please fill logoLink.' })   
         if (!isValidBody(requestBody)) return res.status(400).send({ status: false, messege: "plz provide request body" })
-        if (!isValidAbvr(name))  return res.status(400).send({ status: false, messege: "plz provide valid name" })
-        if (!isValidName(fullName))  return res.status(400).send({ status: false, messege: "plz provide valid fullName" })
+        if (!isValidName(name))  return res.status(400).send({ status: false, messege: "plz provide valid name" })
+        if (!isValidFullName(fullName))  return res.status(400).send({ status: false, messege: "plz provide valid fullName" })
         
         //validation for url
       let correctLink = false
@@ -39,7 +39,7 @@ const createCollege = async function (req, res) {
     }
 }
 
-//get college
+//get collegedetails
 const getCollege = async (req, res) => {
     try {
  const name = req.query.collegeName;

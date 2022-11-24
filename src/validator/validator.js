@@ -8,16 +8,12 @@ const isValidBody = (data) => {
 };
 
 //name
-const isValidName = (name) => {
+const isValidFullName = (name) => {
     const nm = name.trim()
     const regex =/^[a-z" "A-Z]+(([',. -][a-z" "A-Z ])?[a-z" "A-Z])$/.test(nm)
     return regex
 }
 
-const isImgLink= function (url) {
-    if(typeof url !== 'string') return false;
-    return(url.match(/^http[^\?].(jpg|jpeg|gif|png|tiff|bmp)(\?(.))?$/gmi) != null);
-}
 
 //email
 const isValidEmail = (email) => {
@@ -32,15 +28,11 @@ const isValidMobile = (phone) => {
     return regex
 }
 
-const isValidAbvr = (name) => {
-    let regex = /^[a-z.]{2,10}$/.test(name)
+const isValidName = (name) => {
+    let regex = /^[a-zA-Z" "]{2,}$/.test(name)
    return regex
 }
 
-const isValidUrl = (longUrl) => {
-    const regex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%.\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%\+.~#?&\/=]{3,})$/.test(longUrl)
-    return regex
-}
 
 
-module.exports = {isValidBody,isValidName,isValidEmail,isValidMobile,isValidAbvr,isValidUrl,isImgLink}
+module.exports = {isValidBody,isValidName,isValidEmail,isValidMobile,isValidFullName}

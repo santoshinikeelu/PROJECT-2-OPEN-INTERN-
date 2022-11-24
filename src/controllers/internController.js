@@ -14,13 +14,13 @@ const createInterns = async (req, res) => {
         if (!isValidName(name)) return res.status(400).send({ status: false, message: 'Please enter valid name.' })
         if (!isValidEmail(email)) return res.status(400).send({ status: false, message: 'Please enter valid email.' })
         if (!isValidMobile(mobile)) return res.status(400).send({ status: false, message: 'Please enter valid mobile number.⚠️' })
-        const exitsCollegeName = await collegeModel.findOne({ name: collegeName, isDeleted: false })
-        if (!exitsCollegeName) return res.status(400).send({ status: false, msg: "the college doesn't exist." })
+        const existCollegeName = await collegeModel.findOne({ name: collegeName, isDeleted: false })
+        if (!existCollegeName) return res.status(400).send({ status: false, msg: "the college doesn't exist." })
         let duplicateEmail = await internModel.findOne({ email })
         if (duplicateEmail) return res.status(409).send({ status: false, msg: "Email already exists." })
         let duplicateMobile = await internModel.findOne({ mobile })
         if (duplicateMobile) return res.status(409).send({ status: false, msg: "Mobile already exists." })
-        req.body.collegeId = exitsCollegeName._id
+        req.body.collegeId = existCollegeName._id
          const savedData = await internModel.create(reqBody);
         let obj = {
             isDeleted: savedData.isDeleted,
