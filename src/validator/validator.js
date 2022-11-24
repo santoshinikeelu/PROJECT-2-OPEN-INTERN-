@@ -10,8 +10,13 @@ const isValidBody = (data) => {
 //name
 const isValidName = (name) => {
     const nm = name.trim()
-    const regex =/^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z])$/.test(nm)
+    const regex =/^[a-z" "A-Z]+(([',. -][a-z" "A-Z ])?[a-z" "A-Z])$/.test(nm)
     return regex
+}
+
+const isImgLink= function (url) {
+    if(typeof url !== 'string') return false;
+    return(url.match(/^http[^\?].(jpg|jpeg|gif|png|tiff|bmp)(\?(.))?$/gmi) != null);
 }
 
 //email
@@ -38,4 +43,4 @@ const isValidUrl = (longUrl) => {
 }
 
 
-module.exports = {isValidBody,isValidName,isValidEmail,isValidMobile,isValidAbvr,isValidUrl}
+module.exports = {isValidBody,isValidName,isValidEmail,isValidMobile,isValidAbvr,isValidUrl,isImgLink}

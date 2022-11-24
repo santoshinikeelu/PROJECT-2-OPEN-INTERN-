@@ -1,20 +1,31 @@
  const collegeModel = require('../models/collegeModel');
 const internModel = require('../models/internModel');
-const {isValidName,isValidAbvr, isValidBody,isValidUrl} = require('../validator/validator')
+const axios = require('axios')
 
+const {isValidName,isValidAbvr, isValidBody} = require('../validator/validator')
 const createCollege = async function (req, res) {
     try {
         const requestBody = req.body
         const { name, fullName, logoLink } = requestBody
-        
+        if (!name) return res.status(400).send({ status: false, message: 'Please fill name.' })
+        if (!fullName) return res.status(400).send({ status: false, message: 'Please fill fullName.' })
+        if (!logoLink) return res.status(400).send({ status: false, message: 'Please fill logoLink.' })   
         if (!isValidBody(requestBody)) return res.status(400).send({ status: false, messege: "plz provide request body" })
         if (!isValidAbvr(name))  return res.status(400).send({ status: false, messege: "plz provide valid name" })
-        //if (!isValidName(fullName))  return res.status(400).send({ status: false, messege: "plz provide valid fullName" })
-        if (!isValidUrl(logoLink))  return res.status(400).send({ status: false, messege: "Invalid logoLink" })
+        if (!isValidName(fullName))  return res.status(400).send({ status: false, messege: "plz provide valid fullName" })
         
+        //validation for url
+      let correctLink = false
+      await axios.get(logoLink)
+         .then((res) => { correctLink = true })
+         .catch((error) => { correctLink = false })
+      if (correctLink === false) {
+         return res.status(400).send({ status: false, message: "URL is wrong" })
+      }
+        let duplicateName= await collegeModel.findOne({ name })
+        if (duplicateName) return res.status(404).send({ status: false, msg: "Name already exists." })
         // Create college
         const newCollege = await collegeModel.create(requestBody)
-
         const obj = {
             name : newCollege.name,
             fullName : newCollege.fullName,
@@ -28,7 +39,7 @@ const createCollege = async function (req, res) {
     }
 }
 
-
+//get college
 const getCollege = async (req, res) => {
     try {
  const name = req.query.collegeName;
@@ -53,8 +64,5 @@ const getCollege = async (req, res) => {
         return res.status(500).send({ status: false, error: err.message });
     }
 };
-
-
-
 
 module.exports = { createCollege, getCollege }
