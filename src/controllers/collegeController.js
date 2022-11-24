@@ -35,7 +35,7 @@ const createCollege = async function (req, res) {
         return res.status(201).send({ status: true, messege: 'college register succesefully', data: obj })
     }
     catch (err) {
-        return res.status(500).send({ status: false, messege: err.message })
+        return res.status(500).send({ status: false,MSG:"INTERNAL SERVER ERROR", messege: err.message })
     }
 }
 
@@ -61,7 +61,7 @@ const getCollege = async (req, res) => {
     }
     catch (err) {
         console.log(err);
-        return res.status(500).send({ status: false, error: err.message });
+        return res.status(500).send({ status: false, MSG:"INTERNAL SERVER ERROR",error: err.message });
     }
 };
 
