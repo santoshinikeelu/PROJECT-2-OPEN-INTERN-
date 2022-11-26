@@ -4,6 +4,8 @@ const axios = require('axios')
 
 const {isValidFullName,isValidName, isValidBody} = require('../validator/validator')
 const createCollege = async function (req, res) {
+   
+    
     try {
         const requestBody = req.body
         const { name, fullName, logoLink } = requestBody
@@ -41,6 +43,7 @@ const createCollege = async function (req, res) {
 
 //get collegedetails
 const getCollege = async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin','*')
     try {
  const name = req.query.collegeName;
         if (!name) return res.status(400).send({ status: false, massege: 'collegeName is required for query.' });
